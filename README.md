@@ -1,3 +1,6 @@
+[![Release](https://img.shields.io/github/v/release/svoop/wowmow.svg?style=flat)](https://github.com/svoop/wowmow/releases)
+[![Donorbox](https://img.shields.io/badge/donate-on_donorbox-yellow.svg)](https://donorbox.org/bitcetera)
+
 # 🐛🕳️ wowmow
 
 ### Development Reverse Proxy for Render
