@@ -105,6 +105,12 @@ Rails.application.configure do
 end
 ```
 
+## Gotchas
+
+Say you have a Rails app and you would like to test webhooks calling some routes of your app. Hopefully, the webhook issuer provides proper means to authenticate the requests. But maybe the webhooks come from an in-house service and to keep things simple, you simply check the IP the webhook comes from.
+
+Rails gets the client IP from Rack and exposes it as `request.ip`. However, when using a reverse proxy, this proxy is the client so you will always get the IP of the proxy. To get the real remote IP, you should use `request.remote_ip` instead.
+
 ## Development
 
 You're welcome to join the [discussion forum](https://github.com/svoop/development-proxy-render/discussions) to ask questions or drop feature ideas, [submit issues](https://github.com/svoop/development-proxy-render/issues) you may encounter or contribute code by [forking this project and submitting pull requests](https://docs.github.com/en/get-started/quickstart/fork-a-repo).
