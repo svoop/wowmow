@@ -32,7 +32,7 @@ The `reverse_proxy.rb` is self-contained, it uses inline Bundler to install and 
 Therefore, the recommended way to use `reverse_proxy.rb` is to just download and place it somewhere inside an existing project repository which can be used to deploy the project as well as the development proxy:
 
 ```
-wget https://raw.githubusercontent.com/svoop/wowmow/main/reverse_proxy.rb
+wget https://raw.githubusercontent.com/svoop/wowmow/main/lib/reverse_proxy.rb
 ```
 
 There's nothing to build and starting the proxy is dead simple:
