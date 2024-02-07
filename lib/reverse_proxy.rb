@@ -1,3 +1,7 @@
+# wowmow - Development Reverse Proxy for Render
+# https://github.com/svoop/wowmow
+# Release 0.1.0
+
 require 'bundler/inline'
 
 gemfile do
