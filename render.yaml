@@ -7,3 +7,8 @@ services:
     buildCommand: render/build.sh
     startCommand: render/start.sh
     autoDeploy: false
+    envVars:
+      - key: PROXY_AUTH_USERNAME
+        value: development
+      - key: PROXY_AUTH_PASSWORD
+        generateValue: true

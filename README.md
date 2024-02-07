@@ -18,8 +18,6 @@ Render takes care of SSL, so you can access the reverse proxy on its public (cus
 
 Please note: The free tier offered by Render does not feature SSH access, so you have to use at least the starter plan for a few bucks per month. You can further cut the cost by suspending the web service when not in use.
 
-## Security
-
 ⚠️ A reverse proxy is a great place to put spyware. Even thou I would never do that, you should not take my word for it: **Don't** use [my canonical repository URL](https://github.com/svoop/development-proxy-render) as the repository your web service instance pulls from, but first [create your own fork](https://github.com/svoop/development-proxy-render/fork) and use its repository URL instead!
 
 ## Install
@@ -38,6 +36,11 @@ There's nothing to build and starting the proxy is dead simple:
 ruby reverse_proxy.rb
 ```
 
+If you want to restrict access via the reverse proxy with basic auth, make sure the following environment variables are set on the web service instance:
+
+* `PROXY_AUTH_USERNAME`
+* `PROXY_AUTH_PASSWORD`
+
 Alternatively, you can spin up a new web service instance from [this blueprint](https://raw.githubusercontent.com/svoop/development-proxy-render/main/render.yaml):
 
 1. Create your [own fork](https://github.com/svoop/development-proxy-render/fork).
@@ -45,6 +48,8 @@ Alternatively, you can spin up a new web service instance from [this blueprint](
 3. Select the repository which contains your fork.
 4. Optionally add a custom domain.
 5. Start the web service instance.
+
+The blueprint enables basic auth by default with username `development` and a randomly generated password.
 
 ⚠️ The blueprint selects region "Frankfurt" by default in order to assure compliance with GDPR in case you're located in Europe. If that's not the case, you might want to edit the `render.yaml` and [chose a different region](https://docs.render.com/blueprint-spec#region) before you create the instance.
 
