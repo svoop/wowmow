@@ -1,5 +1,6 @@
 [![Release](https://img.shields.io/github/v/release/svoop/wowmow.svg?style=flat)](https://github.com/svoop/wowmow/releases)
 [![Donorbox](https://img.shields.io/badge/donate-on_donorbox-yellow.svg)](https://donorbox.org/bitcetera)
+[![GitHub Sponsors](https://img.shields.io/github/sponsors/svoop.svg)](https://github.com/sponsors/svoop)
 
 # 🐛🕳️ wowmow
 
@@ -9,6 +10,8 @@ A minimalistic reverse proxy on [Render](https://render.com) which makes your lo
 
 * [Homepage](https://github.com/svoop/wowmow)
 * Author: [Sven Schwyn - Bitcetera](https://bitcetera.com)
+
+Thank you for supporting free and open-source software by sponsoring on [GitHub](https://github.com/sponsors/svoop) or on [Donorbox](https://donorbox.com/bitcetera). Any gesture is appreciated, from a single Euro for a ☕️ cup of coffee to 🍹 early retirement.
 
 ## Architecture
 
