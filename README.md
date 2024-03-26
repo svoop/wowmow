@@ -6,7 +6,7 @@
 
 ### Development Reverse Proxy for Render
 
-A minimalistic reverse proxy on [Render](https://render.com) which makes your local development web server reachable from anywhere. This comes in very handy when testing webhooks and friends. Think of it as a simple yet private and low-cost alternative to services like [ngrok](https://ngrok.com) or [loca.lt](https://loca.lt).
+A minimalistic reverse proxy on [Render](https://render.com) which makes your local development web server reachable from anywhere. This comes in very handy when testing webhooks and such. Think of it as a simple yet private and low-cost alternative to services like [ngrok](https://ngrok.com) or [loca.lt](https://loca.lt).
 
 * [Homepage](https://github.com/svoop/wowmow)
 * Author: [Sven Schwyn - Bitcetera](https://bitcetera.com)
@@ -20,36 +20,17 @@ The `reverse_proxy.rb` script is a very simple self-contained Rack app which doe
 * It responds to `/healthz` with status 204 to satisfy the health check by Render.
 * It reverse proxies all other requests to port 3080.
 
-This script is designed to be run by a web service instance on Render. All you have to do is forward your local web server port (e.g. the default Rails port 3000) via an SSH tunnel to port 3080 on the web service instance (see [usage](#usage) below).
+This script is designed to be run by a web service instance on Render. All you have to do is forward your local web server port (e.g. the default Rails port 3000) via an SSH tunnel to port 3080 on the web service instance.
 
-Render takes care of SSL, so you can access the reverse proxy on its public (custom) domain using HTTPS whereas your local web server serves HTTP.
+Render takes care of SSL, so you can access the reverse proxy on its public (or custom) domain using HTTPS whereas your local web server still serves HTTP.
 
 Please note: The free tier offered by Render does not feature SSH access, so you have to use at least the starter plan for a few bucks per month. You can further cut the cost by suspending the web service when not in use.
 
-⚠️ A reverse proxy is a great place to put spyware. Even thou I would never do that, you should not take my word for it: **Don't** use [my canonical repository URL](https://github.com/svoop/wowmow) as the repository your web service instance pulls from, but first [create your own fork](https://github.com/svoop/wowmow/fork) and use its repository URL instead!
+⚠️ A reverse proxy is a great place to put spyware. Even though I would never do that, you should not take my word for it: **Don't** use [my canonical repository URL](https://github.com/svoop/wowmow) as the repository your web service instance pulls from, but first [create your own fork](https://github.com/svoop/wowmow/fork) and use its repository URL instead!
 
 ## Install
 
-The `reverse_proxy.rb` is self-contained, it uses inline Bundler to install and load the few required gems. In other words: `bundle install` is not necessary and collisions with other bundles are not possible.
-
-Therefore, the recommended way to use `reverse_proxy.rb` is to just download and place it somewhere inside an existing project repository which can be used to deploy the project as well as the development proxy:
-
-```
-wget https://raw.githubusercontent.com/svoop/wowmow/main/lib/reverse_proxy.rb
-```
-
-There's nothing to build and starting the proxy is dead simple:
-
-```
-ruby reverse_proxy.rb
-```
-
-If you want to restrict access via the reverse proxy with basic auth, make sure the following environment variables are set on the web service instance:
-
-* `PROXY_AUTH_USERNAME`
-* `PROXY_AUTH_PASSWORD`
-
-Alternatively, you can spin up a new web service instance from [this blueprint](https://raw.githubusercontent.com/svoop/wowmow/main/render.yaml):
+On Render, spin up a new web service instance from [this blueprint](https://raw.githubusercontent.com/svoop/wowmow/main/render.yaml):
 
 1. Create your [own fork](https://github.com/svoop/wowmow/fork).
 2. Access the [new blueprint instance page](https://dashboard.render.com/select-repo?type=blueprint).
@@ -57,13 +38,11 @@ Alternatively, you can spin up a new web service instance from [this blueprint](
 4. Optionally add a custom domain.
 5. Start the web service instance.
 
-The blueprint enables basic auth by default with username `development` and a randomly generated password.
+This blueprint enables basic auth by default with username `development` and a randomly generated password. You can change them by editing the environment variables `PROXY_AUTH_USERNAME` and `PROXY_AUTH_PASSWORD`. To disable basic auth, just delete both environment variables.
 
 ⚠️ The blueprint selects region "Frankfurt" by default in order to assure compliance with GDPR in case you're located in Europe. If that's not the case, you might want to edit the `render.yaml` and [chose a different region](https://docs.render.com/blueprint-spec#region) before you create the instance.
 
 ## Usage
-
-Say, you have Rails app running on the default `localhost:3000`.
 
 To establish the SSH tunnel, connect to your web service instance like so:
 
@@ -71,7 +50,9 @@ To establish the SSH tunnel, connect to your web service instance like so:
 ssh -N -R 3080:localhost:3000 ssh srv-xxxxxxxxxxxxxxxxxxx0@ssh.xxxxxxxx.render.com
 ```
 
-Please replace the connection string `srv-...` with the one Render has generated for your particular web service instance. You find it in the "Shell" menu.
+This example assumes you have a Rails server on the default `localhost:3000`. If your app is served on a different local port, just replace the `3000` with the corresponding port number.
+
+You have to replace the connection string `srv-...` with the one Render has generated for your particular web service instance. You find it in the "Shell" menu.
 
 Can't connect? You most likely forgot to add your SSH public key on the Account Settings page of your user on Render or the SSH public key is out of date.
 
@@ -115,9 +96,9 @@ end
 
 ## Gotchas
 
-Say you have a Rails app and you would like to test webhooks calling some routes of your app. Hopefully, the webhook issuer provides proper means to authenticate the requests. But maybe the webhooks come from an in-house service and to keep things simple, you simply check the IP the webhook comes from.
+Say you have a Rails app and you would like to test webhooks calling some routes of your app. Hopefully, the webhook issuer provides proper means to validate the requests. However, in case you simply restrict the IP addresses the webhook is allowed to comes from, you have to keep the following in mind:
 
-Rails gets the client IP from Rack and exposes it as `request.ip`. However, when using a reverse proxy, this proxy is the client so you will always get the IP of the proxy. To get the real remote IP, you should use `request.remote_ip` instead.
+Rails gets the client IP from Rack and exposes it as `request.ip`. When using a reverse proxy, this proxy is the client and therefore `request.ip` always returns the IP of the proxy. To get the real remote IP of the client, you have to use `request.remote_ip` instead.
 
 ## Trivia
 
