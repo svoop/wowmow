@@ -7,7 +7,7 @@ require 'bundler/inline'
 gemfile do
   source 'https://rubygems.org'
   gem 'rack'
-  gem 'rack-reverse-proxy'
+  gem 'rack-reverse-proxy', github: "samedi/rack-reverse-proxy", ref: "06f21fe"   # NOTE: see https://github.com/waterlink/rack-reverse-proxy/pull/73
   gem 'base64'
   gem 'thin'
 end
